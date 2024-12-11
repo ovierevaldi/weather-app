@@ -1,0 +1,6 @@
+# Ensure consistent LF line endings for JSON files
+*.json text eol=lf
+
+# Handle other file types
+*.sh text eol=lf
+*.bat text eol=crlf
