@@ -1,3 +1,4 @@
+import { PostFavouriteCity} from "@/types/UserData";
 import axios, { AxiosInstance } from "axios";
 
 class ApiProviderClass {
@@ -30,8 +31,11 @@ class ApiProviderClass {
     };
 
     get(url: string){
-        console.log(this.base_url + url)
         return this.apiClient?.get(this.base_url + url);      
+    }
+
+    post<T, D = any>(url:  string, data: D){
+        return this.apiClient?.post<T>(this.base_url + url, data);
     }
 
     async getCurrentWeather(city: string){
@@ -52,6 +56,22 @@ class ApiProviderClass {
 
     getCurrentWeatherIcon(url: string){
         return (`https://${url}`)
+    };
+
+    async addFavouriteCities(data: PostFavouriteCity){
+        try {
+            const response = await this.post('/user-data', data);
+            
+            if(response?.data){
+                return response.data;
+            }
+            else{
+                throw new Error('Cannot Get /user-data');
+            }
+        } catch (error) {
+            console.log(error);
+            throw error;            
+        }
     }
 };
 

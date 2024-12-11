@@ -5,12 +5,15 @@ import WindSpeedData, { WindSpeedUnit } from "@/configs/WindSpeedData"
 import ApiProvider from "@/libs/ApiProvider"
 import { WeatherDataProps } from "@/types/WeatherData"
 import Image from "next/image"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import WindSpeed from "./WindSpeed"
 import CityList from "@/configs/CityList"
 import SelectCity from "./SelectCity"
 import Loading from "./common/Loading"
 import ErrorApi from "./common/ErrorApi"
+import FavCityBtn from "./FavCityBtn"
+import { PostFavouriteCity, UserData } from "@/types/UserData"
+import toast from "react-hot-toast"
 
 type WeatherCardProps = {
     data: WeatherDataProps
@@ -26,9 +29,10 @@ const WeatherCard = () => {
     useState<TemperatureUnit>(Degree.celcius);
     const [selectedWindSpeed, setSelectedWindSpeed] = 
     useState<WindSpeedUnit>(WindSpeedData.kph);
+    const [postFavourite, setPostFavourite] = useState(false);
+    const hasMounted = useRef(false);
 
     const changeCity = (city: string) => {
-        console.log(city)
         setSelectedCity(city);
     };
 
@@ -55,7 +59,31 @@ const WeatherCard = () => {
         };
         getWeather();
 
-      }, [refetchApi, selectedCity]);
+    }, [refetchApi, selectedCity]);
+
+    useEffect(() => {
+        if (!hasMounted.current) {
+            hasMounted.current = true; // Set to true after the first render
+            return;
+        }
+
+        const setFavourite = async (state: boolean) => {
+            const data: PostFavouriteCity = {
+                city: selectedCity,
+                value: state
+            };
+            console.log(data)
+
+            try {
+                const result = ApiProvider.addFavouriteCities(data);
+                toast.success("Added Favourite")
+            } catch (error) {
+                toast.error('Cannot Set Favourite')
+            }
+        };
+
+        setFavourite(postFavourite)
+    }, [postFavourite])
 
     return (
         <div className="p-4">
@@ -71,7 +99,7 @@ const WeatherCard = () => {
                 <div className="space-y-4">
                     <SelectCity value={selectedCity} onCityChanged={changeCity}/>
 
-                   <div className="border rounded-lg p-4">
+                   <div className="border rounded-lg p-4 relative">
                     <div className="flex items-center">
                         <Image 
                             src={ApiProvider.getCurrentWeatherIcon(weatherData.current.condition.icon)} 
@@ -99,7 +127,10 @@ const WeatherCard = () => {
                         } value_mph={weatherData.current.gust_mph} selected_value={selectedWindSpeed}/>
                     </div>
 
-                   
+                    <div className="absolute top-0 right-0 translate-y-2 -translate-x-2">
+                        <FavCityBtn onFavClicked={(state) => setPostFavourite(state)}/>
+                    </div>
+                
                    </div>
                 </div>
             }

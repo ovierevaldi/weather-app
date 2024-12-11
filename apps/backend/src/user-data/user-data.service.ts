@@ -11,7 +11,7 @@ export class UserDataService {
     try {
       const user = await this.prisma.userData.create({
         data: {
-          favourite_cities: createUserDataDto.favourite_cities
+          favourite_cities: [createUserDataDto.city]
         }
       });
       return {message: 'Success Input Favourite Cities', user_id: user.id}
