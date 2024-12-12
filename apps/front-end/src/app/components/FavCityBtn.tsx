@@ -6,21 +6,24 @@ import { FaStar } from "react-icons/fa"
 
 type FavCityBtnProp = {
     isFav?: boolean;
-    onFavClicked: (state: boolean) => void
+    onFavClicked: (state: boolean) => void;
+    showToats?:  boolean;
 }
 
-const FavCityBtn = ({isFav = false, onFavClicked} : FavCityBtnProp) => {
-    const [isFavourite, setIsFavourite] = useState(false);
+const FavCityBtn = ({isFav = false, onFavClicked, showToats = true} : FavCityBtnProp) => {
+    const [isFavourite, setIsFavourite] = useState(isFav);
 
     const setFavorite = (state: boolean) => {
         setIsFavourite(state);
 
-        if(state === true){
-            // toast.success('Added To Favourite!');
+        if(showToats){
+            if(state === true){
+                toast.success('Added To Favourite!');
+            }
+            else{
+                toast.error('Removed From Favourite!');
+            };
         }
-        else{
-            toast.error('Removed From Favourite!');
-        };
 
         onFavClicked(state)
     }

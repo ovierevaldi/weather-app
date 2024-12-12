@@ -102,7 +102,7 @@ const WeatherCard = () => {
     }, [postFavourite])
 
     return (
-        <div className="p-4">
+        <div className="">
             {
                 isLoadApi && <Loading /> 
             }

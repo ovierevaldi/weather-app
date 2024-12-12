@@ -6,8 +6,8 @@ import { IoMdHome } from "react-icons/io";
 
 const Header = () => {
     const listNavigation: NavHeaderProp[] = [
-        {name: 'Home', url: '', icon: <IoMdHome size={22}/>},
-        {name: 'Favourite Cities', url: '', icon:  <FaStar size={20} color='orange'/>}
+        {name: 'Home', url: '/', icon: <IoMdHome size={22}/>},
+        {name: 'Favourite Cities', url: '/favourite', icon:  <FaStar size={20} color='orange'/>}
     ];
 
   return (
@@ -16,7 +16,7 @@ const Header = () => {
             listNavigation.map(nav => 
             <Link
                 key={nav.name}
-                href={''} 
+                href={nav.url} 
                 className='p-4 bg-white text-black rounded flex items-center gap-x-2 hover:scale-105 ease-linear duration-100'>
                 <span> {nav.name} </span>
                 {nav.icon}

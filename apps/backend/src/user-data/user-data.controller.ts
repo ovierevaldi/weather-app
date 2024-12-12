@@ -12,23 +12,13 @@ export class UserDataController {
     return this.userDataService.create(createUserDataDto);
   }
 
-  @Get()
-  findAll() {
-    return this.userDataService.findAll();
-  }
-
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.userDataService.findOne(+id);
+    return this.userDataService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDataDto: CreateUserDataDto) {
     return this.userDataService.update(id, updateUserDataDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userDataService.remove(+id);
   }
 }

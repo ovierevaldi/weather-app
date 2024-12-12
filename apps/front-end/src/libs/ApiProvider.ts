@@ -93,6 +93,22 @@ class ApiProviderClass {
             console.log(error)
             throw error;            
         }
+    };
+
+    async getUserFavouriteCity(userID: string){
+        try {
+            const response: AxiosResponse | undefined = await this.get(`/user-data/${userID}`);
+
+            if(response?.data){
+                return response.data;
+            }
+            else{
+                throw new Error('Cannot Get /user-data');
+            }
+        } catch (error) {
+            console.log(error)
+            throw error;  
+        }
     }
 };
 

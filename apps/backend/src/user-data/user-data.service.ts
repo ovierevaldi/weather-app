@@ -21,12 +21,25 @@ export class UserDataService {
     }
   }
 
-  findAll() {
-    return `This action returns all user Data`;
-  }
+  async findOne(id: string) {
+    try {
+      const userData = await this.prisma.userData.findUnique({
+        where: {
+          id: id
+        }
+      });
+      if(!userData){
+        throw new NotFoundException('User Not Found')
+      };
 
-  findOne(id: number) {
-    return `This action returns a #${id} userDatum`;
+      return userData;
+    } catch (error) {
+      if(error.status === 404){
+        throw error;
+      }
+      else
+        throw new InternalServerErrorException()
+    }
   }
 
   async update(id: string, updateUserDataDto: UpdateUserDataDto) {
@@ -68,9 +81,5 @@ export class UserDataService {
       console.log(error);
       throw new InternalServerErrorException();
     }
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} userDatum`;
   }
 }
