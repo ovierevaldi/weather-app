@@ -29,16 +29,16 @@ const FavouriteCities = () => {
       {
         !userData && 
         <div>
-          <p className='text-center font-bold text-4xl mb-4'>There's no favourite</p>
+          <p className='text-center font-bold text-4xl mb-4'>There&apos;s no favourite</p>
 
-          <div className='text-center flex items-center justify-center'>Try clicking &nbsp; <FavCityBtn showToats={false} isFav={true} onFavClicked={() => {}}/> &nbsp; button to add your favourite city here</div>
+          <div className='text-center flex items-center justify-center'>Try clicking &nbsp; <FavCityBtn isFav={true} onFavClicked={() => {}}/> &nbsp; button to add your favourite city here</div>
         </div>
       }{
         userData && 
         <div>
           <div className='items-center flex justify-center gap-x-4 mb-8'>
             <p className='text-center text-2xl font-bold'>Your Favourite Cities </p>
-            <FavCityBtn showToats={false} isFav={true} onFavClicked={() => {}}/>
+            <FavCityBtn isFav={true} onFavClicked={() => {}}/>
           </div>
            {/* <div className='flex justify-evenly mb-4'>
               <p className='font-bold text-center'>City</p>
@@ -47,7 +47,7 @@ const FavouriteCities = () => {
           <div className='space-y-6'>
             {
               userData.favourite_cities.map(value => 
-              <FavCityBar 
+              <FavCityBar
               key={value} 
               city_name={value} 
               onCityDeleted={() => setRefetchApi(refetchApi + 1)}/>

@@ -5,14 +5,12 @@ import WindSpeedData, { WindSpeedUnit } from "@/configs/WindSpeedData"
 import ApiProvider from "@/libs/ApiProvider"
 import { WeatherDataProps } from "@/types/WeatherData"
 import Image from "next/image"
-import { useEffect, useRef, useState } from "react"
+import { useEffect,useState } from "react"
 import WindSpeed from "./WindSpeed"
-import CityList from "@/configs/CityList"
-import SelectCity from "./SelectCity"
 import Loading from "./common/Loading"
 import ErrorApi from "./common/ErrorApi"
 import FavCityBtn from "./FavCityBtn"
-import { PostFavouriteCity, UserCookie, UserData } from "@/types/UserData"
+import { PostFavouriteCity, UserCookie} from "@/types/UserData"
 import toast from "react-hot-toast"
 import { getUserData, setUserData } from "@/libs/CookieProvider"
 
@@ -27,9 +25,9 @@ const WeatherCard = ({selectedCity, favCityList}: WeatherCardProps) => {
     const [isErrorApi, setIsErrorApi] = useState(false);
     const [refetchApi, setRefetchApi] = useState(0);
     
-    const [selectedDegree, setSelectedDegree] = 
+    const [selectedDegree] = 
     useState<TemperatureUnit>(Degree.celcius);
-    const [selectedWindSpeed, setSelectedWindSpeed] = 
+    const [selectedWindSpeed] = 
     useState<WindSpeedUnit>(WindSpeedData.kph);
     const [postFavourite, setPostFavourite] = useState(false);
 
@@ -56,7 +54,8 @@ const WeatherCard = ({selectedCity, favCityList}: WeatherCardProps) => {
             setIsErrorApi(false)
     
           } catch (error) {
-              setIsErrorApi(true);
+                if(error)
+                    setIsErrorApi(true);
           } finally{
             setIsLoadApi(false)
           }
@@ -84,7 +83,8 @@ const WeatherCard = ({selectedCity, favCityList}: WeatherCardProps) => {
                         
                         toast.success("Favourite City Added!")
                     } catch (error) {
-                        toast.error('Cannot Set Favourite.')
+                        if(error)
+                            toast.error('Cannot Set Favourite.')
                     }
                 }
 
@@ -94,7 +94,8 @@ const WeatherCard = ({selectedCity, favCityList}: WeatherCardProps) => {
                         await ApiProvider.updateFavouriteCity({id: userData.id, data: {...data}});
                         toast.success("New Favourite City Added")
                     } catch (error) {
-                        toast.error('Cannot Add Favourite City')
+                        if(error)
+                            toast.error('Cannot Add Favourite City')
                     }
                 };
 
@@ -103,7 +104,7 @@ const WeatherCard = ({selectedCity, favCityList}: WeatherCardProps) => {
         };
 
         setFavourite(postFavourite)
-    }, [postFavourite])
+    }, [postFavourite, selectedCity])
 
     return (
         <div className="">

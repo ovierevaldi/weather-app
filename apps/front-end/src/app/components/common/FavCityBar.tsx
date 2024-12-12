@@ -6,7 +6,6 @@ import { WeatherDataProps } from '@/types/WeatherData';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react'
 import { MdDelete } from "react-icons/md";
-import { IoIosRefresh } from "react-icons/io";
 import toast from 'react-hot-toast';
 import { getUserData } from '@/libs/CookieProvider';
 
@@ -19,7 +18,7 @@ type FavCityBarProp = {
 const FavCityBar = ({city_name, onCityDeleted} : FavCityBarProp) => {
     const [weatherData, setWeatherData] = useState<WeatherDataProps | null>(null);
 
-    const [selectedDegree, setSelectedDegree] = 
+    const [selectedDegree] = 
     useState<TemperatureUnit>(Degree.celcius);
 
     const [isLoading, setIsLoading] = useState(false);
@@ -35,13 +34,12 @@ const FavCityBar = ({city_name, onCityDeleted} : FavCityBarProp) => {
         if(userCookie){
             try {
                 await ApiProvider.updateFavouriteCity({id: userCookie.id, data: data});
-
                 toast.error(`${city_name} Deleted`);
-                
                 onCityDeleted();
 
             } catch (error) {
-                toast.error('Cannot Remove City')
+                if(error)
+                    toast.error('Cannot Remove City')
             }
         }
     };
@@ -50,17 +48,17 @@ const FavCityBar = ({city_name, onCityDeleted} : FavCityBarProp) => {
         const getCityWeather = async () => {
             try {
                 setIsLoading(true);
-                
                 setWeatherData(await ApiProvider.getCurrentWeather(city_name) as WeatherDataProps);
             } catch (error) {
-                
+                if(error)
+                    toast.error('Cannot get city weather');
             } finally{
-                setIsLoading(false)
+                setIsLoading(false);
             }
         };
 
         getCityWeather();
-    },[])
+    },[city_name])
 
   return (
    <div>

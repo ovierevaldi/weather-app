@@ -1,5 +1,4 @@
 import { PatchFavouriteCity, PostFavouriteCity} from "@/types/UserData";
-import { UserData } from "@prisma/client";
 import axios, { AxiosInstance, AxiosResponse } from "axios";
 
 class ApiProviderClass {
@@ -35,11 +34,11 @@ class ApiProviderClass {
         return this.apiClient?.get(this.base_url + url);      
     }
 
-    post<T, D = any>(url:  string, data: D){
+    post<T, D extends object>(url:  string, data: D){
         return this.apiClient?.post<T>(this.base_url + url, data);
     };
 
-    patch<T, D = any>(url: string, data: D){
+    patch<T, D extends object>(url: string, data: D){
         return this.apiClient?.patch<T>(this.base_url + url, data)
     }
 
