@@ -16,7 +16,7 @@ const FavCityBtn = ({isFav = false, onFavClicked} : FavCityBtnProp) => {
         setIsFavourite(state);
 
         if(state === true){
-            toast.success('Added To Favourite!');
+            // toast.success('Added To Favourite!');
         }
         else{
             toast.error('Removed From Favourite!');

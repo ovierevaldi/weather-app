@@ -1,5 +1,6 @@
-import { PostFavouriteCity} from "@/types/UserData";
-import axios, { AxiosInstance } from "axios";
+import { PatchFavouriteCity, PostFavouriteCity} from "@/types/UserData";
+import { UserData } from "@prisma/client";
+import axios, { AxiosInstance, AxiosResponse } from "axios";
 
 class ApiProviderClass {
     default_timeout: number = 2000;
@@ -36,6 +37,10 @@ class ApiProviderClass {
 
     post<T, D = any>(url:  string, data: D){
         return this.apiClient?.post<T>(this.base_url + url, data);
+    };
+
+    patch<T, D = any>(url: string, data: D){
+        return this.apiClient?.patch<T>(this.base_url + url, data)
     }
 
     async getCurrentWeather(city: string){
@@ -58,9 +63,9 @@ class ApiProviderClass {
         return (`https://${url}`)
     };
 
-    async addFavouriteCities(data: PostFavouriteCity){
+    async createUser(data: PostFavouriteCity){
         try {
-            const response = await this.post('/user-data', data);
+            const response: AxiosResponse | undefined = await this.post('/user-data', data);
             
             if(response?.data){
                 return response.data;
@@ -70,6 +75,22 @@ class ApiProviderClass {
             }
         } catch (error) {
             console.log(error);
+            throw error;            
+        }
+    };
+
+    async updateFavouriteCity(userData: PatchFavouriteCity){
+        try {
+            const response: AxiosResponse | undefined = await this.patch(`/user-data/${userData.id}`, userData.data);
+            
+            if(response?.data){
+                return response.data;
+            }
+            else{
+                throw new Error('Cannot Get /user-data');
+            }
+        } catch (error) {
+            console.log(error)
             throw error;            
         }
     }

@@ -4,7 +4,16 @@ export type UserData = {
 }
 
 export type PostFavouriteCity = {
-    id?: string,
     city: string,
     value: boolean
+};
+
+export type PatchFavouriteCity = {
+    id: string,
+    data: PostFavouriteCity
+};
+
+
+export type UserCookie = {
+    id: string
 }

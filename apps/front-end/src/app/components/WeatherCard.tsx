@@ -12,8 +12,9 @@ import SelectCity from "./SelectCity"
 import Loading from "./common/Loading"
 import ErrorApi from "./common/ErrorApi"
 import FavCityBtn from "./FavCityBtn"
-import { PostFavouriteCity, UserData } from "@/types/UserData"
+import { PostFavouriteCity, UserCookie, UserData } from "@/types/UserData"
 import toast from "react-hot-toast"
+import { getUserData, setUserData } from "@/libs/CookieProvider"
 
 type WeatherCardProps = {
     data: WeatherDataProps
@@ -62,23 +63,38 @@ const WeatherCard = () => {
     }, [refetchApi, selectedCity]);
 
     useEffect(() => {
-        if (!hasMounted.current) {
-            hasMounted.current = true; // Set to true after the first render
-            return;
-        }
-
         const setFavourite = async (state: boolean) => {
-            const data: PostFavouriteCity = {
-                city: selectedCity,
-                value: state
-            };
-            console.log(data)
+            if(state === true){
+                const data: PostFavouriteCity = {
+                    city: selectedCity,
+                    value: state
+                };
+                
+                const userData = getUserData() as UserCookie;
+                // Create new User
+                if(!userData){
+                    try {
+                        const result = await ApiProvider.createUser(data);
+                        if(result.data){
+                            setUserData({id: result.data.user_id});
+                        }
+                        
+                        toast.success("Added Favourite")
+                    } catch (error) {
+                        toast.error('Cannot Set Favourite')
+                    }
+                }
+                // Update User Favourite
+                else{
+                    try {
+                        await ApiProvider.updateFavouriteCity({id: userData.id, data: {...data}});
+                        toast.success("New Favourite City Added")
+                    } catch (error) {
+                        toast.error('Cannot Add Favourite City')
+                    }
+                };
 
-            try {
-                const result = ApiProvider.addFavouriteCities(data);
-                toast.success("Added Favourite")
-            } catch (error) {
-                toast.error('Cannot Set Favourite')
+                setPostFavourite(false);
             }
         };
 
