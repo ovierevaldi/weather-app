@@ -95,7 +95,7 @@ class ApiProviderClass {
         }
     };
 
-    async getUserFavouriteCity(userID: string){
+    async getUserData(userID: string){
         try {
             const response: AxiosResponse | undefined = await this.get(`/user-data/${userID}`);
 
@@ -109,7 +109,7 @@ class ApiProviderClass {
             console.log(error)
             throw error;  
         }
-    }
+    };
 };
 
 const ApiProvider = new ApiProviderClass(process.env.NEXT_PUBLIC_API_URL);

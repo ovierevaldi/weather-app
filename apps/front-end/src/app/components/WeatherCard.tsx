@@ -17,28 +17,33 @@ import toast from "react-hot-toast"
 import { getUserData, setUserData } from "@/libs/CookieProvider"
 
 type WeatherCardProps = {
-    data: WeatherDataProps
+    selectedCity: string;
+    favCityList: string[];
 }
 
-const WeatherCard = () => {
+const WeatherCard = ({selectedCity, favCityList}: WeatherCardProps) => {
     const [weatherData, setWeatherData] = useState<WeatherDataProps | null>(null);
     const [isLoadApi, setIsLoadApi] = useState(false);
     const [isErrorApi, setIsErrorApi] = useState(false);
     const [refetchApi, setRefetchApi] = useState(0);
-    const [selectedCity, setSelectedCity] = useState(CityList[0]);
+    
     const [selectedDegree, setSelectedDegree] = 
     useState<TemperatureUnit>(Degree.celcius);
     const [selectedWindSpeed, setSelectedWindSpeed] = 
     useState<WindSpeedUnit>(WindSpeedData.kph);
     const [postFavourite, setPostFavourite] = useState(false);
-    const hasMounted = useRef(false);
 
-    const changeCity = (city: string) => {
-        setSelectedCity(city);
-    };
 
     const retryFetchApi = () => {
         return setRefetchApi(refetchApi + 1);
+    };
+
+    const isFavCity = (): boolean => {
+        const result =  favCityList.find(city => city === selectedCity);
+        if(result)
+            return true;
+        else
+            return false;
     }
 
     useEffect(() =>{
@@ -51,9 +56,7 @@ const WeatherCard = () => {
             setIsErrorApi(false)
     
           } catch (error) {
-              console.log(error);
               setIsErrorApi(true);
-              alert('Cannot get weather data');
           } finally{
             setIsLoadApi(false)
           }
@@ -79,11 +82,12 @@ const WeatherCard = () => {
                             setUserData({id: result.data.user_id});
                         }
                         
-                        toast.success("Added Favourite")
+                        toast.success("Favourite City Added!")
                     } catch (error) {
-                        toast.error('Cannot Set Favourite')
+                        toast.error('Cannot Set Favourite.')
                     }
                 }
+
                 // Update User Favourite
                 else{
                     try {
@@ -113,9 +117,10 @@ const WeatherCard = () => {
             {
                 weatherData && !isLoadApi && !isErrorApi &&
                 <div className="space-y-4">
-                    <SelectCity value={selectedCity} onCityChanged={changeCity}/>
+                   
 
-                   <div className="border rounded-lg p-4 relative">
+                   <div 
+                    className="border rounded-lg p-4 relative">
                     <div className="flex items-center">
                         <Image 
                             src={ApiProvider.getCurrentWeatherIcon(weatherData.current.condition.icon)} 
@@ -144,7 +149,7 @@ const WeatherCard = () => {
                     </div>
 
                     <div className="absolute top-0 right-0 translate-y-2 -translate-x-2">
-                        <FavCityBtn onFavClicked={(state) => setPostFavourite(state)}/>
+                        <FavCityBtn isFav={isFavCity()} onFavClicked={(state) => setPostFavourite(state)} />
                     </div>
                 
                    </div>

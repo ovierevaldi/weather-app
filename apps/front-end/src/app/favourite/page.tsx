@@ -16,7 +16,7 @@ const FavouriteCities = () => {
       const userCookie = getUserData();
 
       if(userCookie){
-        const userData = await ApiProvider.getUserFavouriteCity(userCookie.id);
+        const userData = await ApiProvider.getUserData(userCookie.id);
         setUserData(userData)
       }
     };

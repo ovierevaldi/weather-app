@@ -1,32 +1,20 @@
 'use client'
-
 import { useState } from "react"
-import toast from "react-hot-toast"
 import { FaStar } from "react-icons/fa"
 
 type FavCityBtnProp = {
-    isFav?: boolean;
+    isFav: boolean;
     onFavClicked: (state: boolean) => void;
-    showToats?:  boolean;
 }
 
-const FavCityBtn = ({isFav = false, onFavClicked, showToats = true} : FavCityBtnProp) => {
+const FavCityBtn = ({isFav, onFavClicked} : FavCityBtnProp) => {
     const [isFavourite, setIsFavourite] = useState(isFav);
 
     const setFavorite = (state: boolean) => {
         setIsFavourite(state);
-
-        if(showToats){
-            if(state === true){
-                toast.success('Added To Favourite!');
-            }
-            else{
-                toast.error('Removed From Favourite!');
-            };
-        }
-
         onFavClicked(state)
-    }
+    };
+
   return (
     <button 
         className="border rounded-full p-1 hover:scale-105"
