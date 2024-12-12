@@ -9,7 +9,7 @@ import FavCityBar from '../components/common/FavCityBar';
 
 const FavouriteCities = () => {
   const [userData, setUserData] = useState<undefined | UserData>(undefined);
-
+  const [refetchApi, setRefetchApi] = useState(0)
 
   useEffect(() => {
     const getFavouriteCities = async () => {
@@ -22,7 +22,7 @@ const FavouriteCities = () => {
     };
 
     getFavouriteCities();
-  }, [])
+  }, [refetchApi])
 
   return (
     <div>
@@ -47,7 +47,10 @@ const FavouriteCities = () => {
           <div className='space-y-6'>
             {
               userData.favourite_cities.map(value => 
-              <FavCityBar key={value} city_name={value}/>
+              <FavCityBar 
+              key={value} 
+              city_name={value} 
+              onCityDeleted={() => setRefetchApi(refetchApi + 1)}/>
             )
             }
           </div>

@@ -8,25 +8,55 @@ import React, { useEffect, useState } from 'react'
 import { MdDelete } from "react-icons/md";
 import { IoIosRefresh } from "react-icons/io";
 import toast from 'react-hot-toast';
+import { getUserData } from '@/libs/CookieProvider';
 
 type FavCityBarProp = {
-    city_name: string
+    city_name: string;
+    onCityDeleted: () => void;
 }
 
 
-const FavCityBar = ({city_name} : FavCityBarProp) => {
+const FavCityBar = ({city_name, onCityDeleted} : FavCityBarProp) => {
     const [weatherData, setWeatherData] = useState<WeatherDataProps | null>(null);
 
     const [selectedDegree, setSelectedDegree] = 
     useState<TemperatureUnit>(Degree.celcius);
+
+    const [isLoading, setIsLoading] = useState(false);
     
-    const removeFavCity = () => {
-        toast.error(`${city_name} Deleted`)
+    const removeFavCity = async () => {
+
+        const data = {
+            city: city_name,
+            value: false
+        };
+
+        const userCookie = getUserData();
+        if(userCookie){
+            try {
+                await ApiProvider.updateFavouriteCity({id: userCookie.id, data: data});
+
+                toast.error(`${city_name} Deleted`);
+                
+                onCityDeleted();
+
+            } catch (error) {
+                toast.error('Cannot Remove City')
+            }
+        }
     };
     
     useEffect(() => {
         const getCityWeather = async () => {
-            setWeatherData(await ApiProvider.getCurrentWeather(city_name) as WeatherDataProps);
+            try {
+                setIsLoading(true);
+                
+                setWeatherData(await ApiProvider.getCurrentWeather(city_name) as WeatherDataProps);
+            } catch (error) {
+                
+            } finally{
+                setIsLoading(false)
+            }
         };
 
         getCityWeather();
@@ -42,8 +72,12 @@ const FavCityBar = ({city_name} : FavCityBarProp) => {
             </div>
 
             {
-                !weatherData && 
+                !weatherData && !isLoading &&
                 <p className='text-red-500'>Failed to fetch data...</p>
+            }
+            {
+                isLoading &&
+                <p>Loading...</p>
             }
             {
                 weatherData && 
