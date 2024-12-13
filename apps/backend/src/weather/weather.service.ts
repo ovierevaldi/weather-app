@@ -1,28 +1,35 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { CreateWeatherDto } from './dto/create-weather.dto';
-import { UpdateWeatherDto } from './dto/update-weather.dto';
+import { BadRequestException, Injectable, InternalServerErrorException, Logger, UnauthorizedException } from '@nestjs/common';
 import axios from 'axios';
 import { ConfigService } from '@nestjs/config';
+import { DatabaseLogger } from 'src/logger/logger.service';
 
 @Injectable()
 export class WeatherService {
+  private readonly logger = new Logger(WeatherService.name);
 
-  constructor(private readonly configService: ConfigService){}
+  constructor(private readonly configService: ConfigService, private loggerService: DatabaseLogger)
+  {}
 
-  create(createWeatherDto: CreateWeatherDto) {
-    return 'This action adds a new weather';
-  }
-
-  async findAll(city: string = 'Jakarta') {
+  async findAll(city: string) {
 
     const url = `https://api.weatherapi.com/v1/current.json?key=${this.configService.get<string>('WEATHER_API_KEY')}&q=${city}`;
-
     try {
       const response = await axios.get(url);
       return response.data;
     } catch (error) {
-      console.log(error);
-      throw new InternalServerErrorException('Cannot Get Weather Data')
+        if(error.response.status === 400){
+          throw new BadRequestException(error.response.data.error.message)          
+        }
+        else if(error.response.status === 401){
+          this.logger.error(error.response.data.error.message);
+          await this.loggerService.log(401, error.response.data.error.message)
+        }
+
+        else if(error.response.status === 403){
+          this.logger.error(error.response.data.error.message);
+          await this.loggerService.log(403, error.response.data.error.message)
+        }
+        throw new InternalServerErrorException('Cannot get weather data. Please contact admin');
     }
   }
 
@@ -30,18 +37,21 @@ export class WeatherService {
     const apiWeatherURL = `http://api.weatherapi.com/v1/forecast.json?key=${this.configService.get<string>('WEATHER_API_KEY')}&q=${city}&days=${days}&aqi=no&alerts=no`;
     try {
       const response = await axios.get(apiWeatherURL);
-      return response.data
+      return response.data;
     } catch (error) {
       console.log(error);
-      throw new InternalServerErrorException('Cannot get Forecast Data')
+      if(error.response.status === 400){
+        throw new BadRequestException(error.response.data.error.message)          
+      }
+      
+      else if(error.response.status === 401){
+          this.logger.error(error.response.data.error.message);
+      }
+      else if(error.response.status === 403){
+          this.logger.error(error.response.data.error.message);
+          await this.loggerService.log(403, error.response.data.error.message)
+      }
+      throw new InternalServerErrorException('Cannot get Forecast Data. Please contact admin');
     }
-  }
-
-  update(id: number, updateWeatherDto: UpdateWeatherDto) {
-    return `This action updates a #${id} weather`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} weather`;
   }
 }
