@@ -14,10 +14,10 @@ const SelectCity = ({value, onCityChanged} : SelectCityProp ) => {
 
   return (
     <div className="flex items-center gap-x-4">
-        <p>Selected Region:</p>
+        <p className='font-bold text-lg lg:text-3xl'>Selected Region:</p>
         <select
             value={value}
-            className='p-2 rounded text-black'
+            className='p-2 rounded text-black lg:text-2xl'
             onChange={changeCity}>
             {
                 CityList.map(city => 
