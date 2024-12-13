@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react'
 import WindSpeed from './WindSpeed';
 import WindSpeedData, { WindSpeedUnit } from '@/configs/WindSpeedData';
 import Loading from './common/Loading';
+import toast from 'react-hot-toast';
 
 type ForecastProp = {
     selected_city: string;
@@ -20,10 +21,17 @@ const Forecast = ({selected_city, day_amount = 4} : ForecastProp) => {
 
     useEffect(() => {
         const forecastData = async () => {
-            setIsFetchingApi(true);
-            const response = await ApiProvider.getForecastData(selected_city, day_amount);
-            setForecastData(response?.data as ForecastWeatherProp);
-            setIsFetchingApi(false);
+            try {
+                setIsFetchingApi(true);
+                const response = await ApiProvider.getForecastData(selected_city, day_amount);
+                setForecastData(response?.data as ForecastWeatherProp);
+            } catch (error) {
+                const err = error as Error
+                toast.error(err.message);
+            }
+            finally{
+                setIsFetchingApi(false);
+            }
         };
 
         forecastData();
