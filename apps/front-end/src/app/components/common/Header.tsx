@@ -18,7 +18,7 @@ const Header = () => {
                 key={nav.name}
                 href={nav.url} 
                 className='px-4 py-3 bg-white text-black rounded flex items-center gap-x-2 hover:scale-105 ease-linear duration-100'>
-                <span> {nav.name} </span>
+                <span className='lg:text-2xl'> {nav.name} </span>
                 {nav.icon}
             </Link>)
         }
