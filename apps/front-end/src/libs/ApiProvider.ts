@@ -1,4 +1,5 @@
 import { PatchFavouriteCity, PostFavouriteCity} from "@/types/UserData";
+import { rejects } from "assert";
 import axios, { AxiosInstance, AxiosResponse } from "axios";
 
 class ApiProviderClass {
@@ -109,6 +110,16 @@ class ApiProviderClass {
             throw error;  
         }
     };
+
+    async getForecastData(city: string, days: number){
+        try {
+            const response = this.get(`/weather/forecast?city=${city}&days=${days}`);
+            return response;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
 };
 
 const ApiProvider = new ApiProviderClass(process.env.NEXT_PUBLIC_API_URL);

@@ -9,7 +9,7 @@ type WindSpeedProp = {
 
 const WindSpeed = ({value_kph, value_mph, selected_value} : WindSpeedProp) => {
   return (
-    <div className="font-bold text-lg">
+    <div className="font-medium text-xl">
         {selected_value.symbol === 'kph' ? value_kph : value_mph} / {selected_value.symbol}    
     </div>
   )

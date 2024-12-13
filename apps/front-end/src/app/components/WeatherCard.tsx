@@ -117,43 +117,43 @@ const WeatherCard = ({selectedCity, favCityList}: WeatherCardProps) => {
             }
             {
                 weatherData && !isLoadApi && !isErrorApi &&
-                <div className="space-y-4">
-                   
 
-                   <div 
-                    className="border rounded-lg p-4 relative">
-                    <div className="flex items-center">
+                <div className="border rounded-lg px-8 py-6 relative space-y-4 max-w-md mx-auto">
+                    <div className="flex items-center justify-center">
                         <Image 
                             src={ApiProvider.getCurrentWeatherIcon(weatherData.current.condition.icon)} 
                             alt="Weather Icon" 
                             width={100} 
                             height={100}>
                         </Image>
-                        <p>
+                        <p className="font-semibold">
                             {weatherData.current.condition.text}
                         </p>
                     </div>
 
-                    <div className="text-5xl mb-4">
+                    <div className="text-5xl text-center font-semibold">
                         {weatherData.current.temp_c} <span>{'\u00B0'}{selectedDegree.symbol}</span>
                     </div>
+                    
+                    <div className="space-y-2">
+                        <div>
+                            Humidity:&nbsp;<span className="font-medium text-lg">{weatherData.current.humidity}</span>
+                        </div>
 
-                    <div>
-                            Humidity: <span className="font-bold text-lg">{weatherData.current.humidity}</span>
+                        <div className="flex items-center">
+                            Wind Speed:&nbsp;
+                            <WindSpeed value_kph={
+                                weatherData.current.wind_kph
+                            } value_mph={weatherData.current.gust_mph} selected_value={selectedWindSpeed}/>
+                        </div>
+
+                        
                     </div>
 
-                    <div className="flex items-center">
-                        Wind Speed: 
-                        <WindSpeed value_kph={
-                            weatherData.current.wind_kph
-                        } value_mph={weatherData.current.gust_mph} selected_value={selectedWindSpeed}/>
-                    </div>
-
-                    <div className="absolute top-0 right-0 translate-y-2 -translate-x-2">
-                        <FavCityBtn isFav={isFavCity()} onFavClicked={(state) => setPostFavourite(state)} />
-                    </div>
+                    <div className="absolute top-0 right-0 -translate-y-2 -translate-x-2">
+                            <FavCityBtn isFav={isFavCity()} onFavClicked={(state) => setPostFavourite(state)} />
+                        </div>
                 
-                   </div>
                 </div>
             }
         </div>

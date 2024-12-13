@@ -19,7 +19,7 @@ const FavCityBtn = ({isFav, onFavClicked} : FavCityBtnProp) => {
     <button 
         className="border rounded-full p-1 hover:scale-105"
         onClick={() => setFavorite(!isFavourite)}>
-        <FaStar size={25} color={isFavourite ? 'yellow' : 'white'}/>
+        <FaStar size={30} color={isFavourite ? 'yellow' : 'white'}/>
     </button>
   )
 }
