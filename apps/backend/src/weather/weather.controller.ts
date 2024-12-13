@@ -17,9 +17,9 @@ export class WeatherController {
     return this.weatherService.findAll(city);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.weatherService.findOne(+id);
+  @Get('/forecast')
+  getForecast(@Query('city') city: string, @Query('days') days: number) {
+    return this.weatherService.getForecast(city, days);
   }
 
   @Patch(':id')

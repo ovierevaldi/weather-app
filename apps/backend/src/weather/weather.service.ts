@@ -26,8 +26,15 @@ export class WeatherService {
     }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} weather`;
+  async getForecast(city: string, days: number) {
+    const apiWeatherURL = `http://api.weatherapi.com/v1/forecast.json?key=${this.configService.get<string>('WEATHER_API_KEY')}&q=${city}&days=${days}&aqi=no&alerts=no`;
+    try {
+      const response = await axios.get(apiWeatherURL);
+      return response.data
+    } catch (error) {
+      console.log(error);
+      throw new InternalServerErrorException('Cannot get Forecast Data')
+    }
   }
 
   update(id: number, updateWeatherDto: UpdateWeatherDto) {
