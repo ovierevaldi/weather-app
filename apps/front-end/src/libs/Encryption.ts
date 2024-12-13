@@ -1,4 +1,4 @@
-import CryptoJS, { enc } from 'crypto-js'
+import CryptoJS from 'crypto-js'
 
 const EncryptProvider = () => {
     
