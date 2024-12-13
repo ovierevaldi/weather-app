@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { CreateUserDataDto } from './dto/create-user-data.dto';
 import { UpdateUserDataDto } from './dto/update-user-data.dto';
 import { PrismaService } from 'src/prisma.service';
@@ -17,7 +17,7 @@ export class UserDataService {
       return {message: 'Success Input Favourite Cities', data: {user_id: user.id}}
     } catch (error) {
       console.log(error);
-      throw new InternalServerErrorException('Internal Server Error')
+      throw new InternalServerErrorException('Cannot Create New User. Please contact admin')
     }
   }
 
@@ -28,6 +28,7 @@ export class UserDataService {
           id: id
         }
       });
+      
       if(!userData){
         throw new NotFoundException('User Not Found')
       };
@@ -49,22 +50,23 @@ export class UserDataService {
       });
 
       if(!userData)
-        throw new NotFoundException('User Not Exsist');
+        throw new NotFoundException('User Not Found');
 
       // Append
       if(updateUserDataDto.value === true){
         if(userData.favourite_cities.indexOf(updateUserDataDto.city) > -1)
-          return {message: 'Requested City Already A Favourite'};
+          throw new BadRequestException ({message: 'Requested City Already A Favourite', code: 101});
 
         userData.favourite_cities.push(updateUserDataDto.city);
       }
+
       // Remove City
       else{
         const index = userData.favourite_cities.indexOf(updateUserDataDto.city);
         if(index > -1)
           userData.favourite_cities.splice(index, 1);
         else{
-          return {message: 'Requested City Not Found'}
+          throw new BadRequestException({message: 'Requested City Not Found', code: 102})
         }
       }
 
@@ -75,10 +77,17 @@ export class UserDataService {
         data: {favourite_cities: userData.favourite_cities}
       });
 
-      return {message: 'Success Update User'}
+      return {message: 'Success Update User Favourite City'}
 
     } catch (error) {
-      console.log(error);
+      if(error.status === 404){
+        throw error;
+      }
+
+      if(error.status === 400){
+        throw error;
+      }
+
       throw new InternalServerErrorException();
     }
   }
