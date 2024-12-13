@@ -61,53 +61,52 @@ const FavCityBar = ({city_name, onCityDeleted} : FavCityBarProp) => {
     },[city_name])
 
   return (
-   <div>
+    <div className='flex bg-white text-black justify-evenly py-1 rounded-lg items-center p-2 lg:p-3 md:max-w-2xl md:mx-auto lg:max-w-5xl'>
         
-        <div className='flex bg-white text-black justify-evenly py-1 rounded-lg items-center'>
-            
-            <div className='text-2xl w-1/4 text-center'>
-                {city_name}
-            </div>
-
-            {
-                !weatherData && !isLoading &&
-                <p className='text-red-500'>Failed to fetch data...</p>
-            }
-            {
-                isLoading &&
-                <p>Loading...</p>
-            }
-            {
-                weatherData && 
-                <div className='flex items-center gap-x-4 w-2/4 justify-center'>
-                    <div className="flex items-center">
-                        <Image 
-                            src={ApiProvider.getCurrentWeatherIcon(weatherData.current.condition.icon)} 
-                            alt="Weather Icon" 
-                            width={70} 
-                            height={70}>
-                        </Image>
-                        <p className='text-2xl'>
-                            {weatherData.current.condition.text}
-                        </p>
-                    </div>
-                    <div className="text-3xl">
-                        {weatherData.current.temp_c} <span>{'\u00B0'}{selectedDegree.symbol}</span>
-                    </div>
-                </div>
-            }
-            <div className='flex gap-x-4 w-1/4 justify-end px-4'>
-                {/* <button className='bg-slate-400 p-2 rounded'>
-                    <IoIosRefresh size={30} color='white'/>
-                </button> */}
-                <button
-                    onClick={removeFavCity}
-                    className='bg-red-500 rounded-md p-2'>
-                    <MdDelete size={30} color='white'/>
-                </button>
-            </div>
+        <div className='text-xl w-1/4 text-center font-medium md:text-2xl lg:text-3xl'>
+            {city_name}
         </div>
-   </div>
+
+        {
+            !weatherData && !isLoading &&
+            <p className='text-red-500'>Failed to fetch data...</p>
+        }
+        {
+            isLoading &&
+            <p>Loading...</p>
+        }
+        {
+            weatherData && 
+            <div className='flex items-center gap-x-4 w-2/4 justify-center xl:flex-col py-2'>
+                <div className="text-2xl font-medium lg:text-4xl">
+                    {weatherData.current.temp_c} <span>{'\u00B0'}{selectedDegree.symbol}</span>
+                </div>
+                <div className="flex items-center">
+                    <Image 
+                        src={ApiProvider.getCurrentWeatherIcon(weatherData.current.condition.icon)} 
+                        alt="Weather Icon" 
+                        width={65} 
+                        height={65}
+                        className='w-16 md:w-20 lg:w-24'>
+                    </Image>
+                    <p className='hidden md:text-2xl lg:block lg:text-2xl'>
+                        {weatherData.current.condition.text}
+                    </p>
+                </div>
+                
+            </div>
+        }
+        <div className='flex gap-x-4 w-1/4 justify-end'>
+            {/* <button className='bg-slate-400 p-2 rounded'>
+                <IoIosRefresh size={30} color='white'/>
+            </button> */}
+            <button
+                onClick={removeFavCity}
+                className='bg-red-500 rounded-md p-2'>
+                <MdDelete size={25} color='white' className='w-6 md:w-7 md:h-7 lg:w-8 lg:h-8'/>
+            </button>
+        </div>
+    </div>
   )
 }
 

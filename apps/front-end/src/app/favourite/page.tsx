@@ -35,16 +35,16 @@ const FavouriteCities = () => {
         </div>
       }{
         userData && 
-        <div>
-          <div className='items-center flex justify-center gap-x-4 mb-8'>
-            <p className='text-center text-2xl font-bold'>Your Favourite Cities </p>
+        <div className='p-4'>
+          <div className='items-center flex justify-center gap-x-4 mb-8 lg:mb-12'>
+            <p className='text-center text-2xl font-bold lg:text-3xl'>Your Favourite Cities </p>
             <FavCityBtn isFav={true} onFavClicked={() => {}}/>
           </div>
            {/* <div className='flex justify-evenly mb-4'>
               <p className='font-bold text-center'>City</p>
               <p className='font-bold text-center'>Status</p>
           </div> */}
-          <div className='space-y-6'>
+          <div className='space-y-6 md:space-y-9 lg:space-y-12'>
             {
               userData.favourite_cities.map(value => 
               <FavCityBar
