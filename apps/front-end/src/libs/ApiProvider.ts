@@ -1,5 +1,4 @@
 import { PatchFavouriteCity, PostFavouriteCity} from "@/types/UserData";
-import { rejects } from "assert";
 import axios, { AxiosInstance, AxiosResponse } from "axios";
 
 class ApiProviderClass {

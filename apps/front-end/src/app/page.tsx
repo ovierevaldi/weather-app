@@ -8,7 +8,6 @@ import { getUserData } from "@/libs/CookieProvider";
 import { UserData } from "@/types/UserData";
 import ApiProvider from "@/libs/ApiProvider";
 import Forecast from "./components/Forecast";
-import DetectLocationBtn from "./components/common/DetectLocationBtn";
 export default function Home() {
   const [selectedCity, setSelectedCity] = useState(CityList[0]);
 

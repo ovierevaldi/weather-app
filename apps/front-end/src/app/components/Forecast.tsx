@@ -27,7 +27,7 @@ const Forecast = ({selected_city, day_amount = 4} : ForecastProp) => {
         };
 
         forecastData();
-    }, [selected_city])
+    }, [selected_city, day_amount])
 
   return (
     <div>
