@@ -8,6 +8,7 @@ import { getUserData } from "@/libs/CookieProvider";
 import { UserData } from "@/types/UserData";
 import ApiProvider from "@/libs/ApiProvider";
 import Forecast from "./components/Forecast";
+import toast from "react-hot-toast";
 export default function Home() {
   const [selectedCity, setSelectedCity] = useState(CityList[0]);
 
@@ -21,8 +22,13 @@ export default function Home() {
   useEffect(() => {
     const fetchUserData = async () => {
         if(userData){
-          const data = await ApiProvider.getUserData(userData.id);
-          setUserData(data);
+         try {
+            const data = await ApiProvider.getUserData(userData.id);
+            setUserData(data);
+         } catch (error) {
+            const err = error as Error;
+            toast.error(err.message)
+         }
         }
     };
     fetchUserData();

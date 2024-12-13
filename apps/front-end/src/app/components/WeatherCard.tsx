@@ -51,11 +51,11 @@ const WeatherCard = ({selectedCity, favCityList}: WeatherCardProps) => {
     
             setWeatherData(await ApiProvider.getCurrentWeather(selectedCity) as WeatherDataProps);
 
-            setIsErrorApi(false)
+            setIsErrorApi(false);
     
           } catch (error) {
-                if(error)
-                    setIsErrorApi(true);
+            if(error)
+                setIsErrorApi(true);
           } finally{
             setIsLoadApi(false)
           }
@@ -83,8 +83,10 @@ const WeatherCard = ({selectedCity, favCityList}: WeatherCardProps) => {
                         
                         toast.success("Favourite City Added!")
                     } catch (error) {
-                        if(error)
-                            toast.error('Cannot Set Favourite.')
+                        if(error){
+                            const err = error as Error;
+                            toast.error(err.message)
+                        }
                     }
                 }
 
@@ -94,8 +96,8 @@ const WeatherCard = ({selectedCity, favCityList}: WeatherCardProps) => {
                         await ApiProvider.updateFavouriteCity({id: userData.id, data: {...data}});
                         toast.success("New Favourite City Added")
                     } catch (error) {
-                        if(error)
-                            toast.error('Cannot Add Favourite City')
+                        const err = error as Error;
+                        toast.error(err.message)
                     }
                 };
 

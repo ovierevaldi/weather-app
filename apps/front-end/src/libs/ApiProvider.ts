@@ -1,5 +1,5 @@
 import { PatchFavouriteCity, PostFavouriteCity} from "@/types/UserData";
-import axios, { AxiosInstance, AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosInstance, AxiosResponse } from "axios";
 
 class ApiProviderClass {
     default_timeout: number = 2000;
@@ -50,11 +50,11 @@ class ApiProviderClass {
                 return response.data;
             }
             else{
-                throw new Error('Cannot Get /weather');
+                throw new Error('Cannot Get Weather');
             }
         } catch (error) {
             console.log(error);
-            throw error;            
+            throw new Error('Cannot Get Weather');            
         }
     }
 
@@ -65,23 +65,34 @@ class ApiProviderClass {
     async createUser(data: PostFavouriteCity){
         try {
             const response: AxiosResponse | undefined = await this.post('/user-data', data);
-            
+            // const response: AxiosResponse | undefined = await this.post('/user-data', {city: '', value: true});
+
             if(response?.data){
                 return response.data;
             }
             else{
-                throw new Error('Cannot Get /user-data');
-            }
+                throw new Error('Cannot Post User Favourite.');
+            };
+
         } catch (error) {
-            console.log(error);
-            throw error;            
+            if(error){
+                console.log(error);
+                const err = error as AxiosError;
+                if(err.status === 400){
+                    throw new Error('Bad Request Parameter!')
+                }
+            }
+            
+            throw new Error('Something went wrong. Cannot Set Favourite');            
         }
     };
 
     async updateFavouriteCity(userData: PatchFavouriteCity){
         try {
             const response: AxiosResponse | undefined = await this.patch(`/user-data/${userData.id}`, userData.data);
-            
+            // const response: AxiosResponse | undefined = await this.patch(`/user-data/${userData.id}`, {});
+            // const response: AxiosResponse | undefined = await this.patch(`/user-data/12312`, userData.data);
+
             if(response?.data){
                 return response.data;
             }
@@ -89,34 +100,64 @@ class ApiProviderClass {
                 throw new Error('Cannot Get /user-data');
             }
         } catch (error) {
-            console.log(error)
-            throw error;            
+            console.log(error);
+
+            const err = error as AxiosError;
+            if(err.status === 400){
+                throw new Error('Bad Request Parameter!')
+            }
+
+            else if(err.status === 404){
+                throw new Error('Error. User Not Found')
+            }
+            
+            throw new Error('Something went wrong. Cannot Set Favourite');          
         }
     };
 
     async getUserData(userID: string){
         try {
             const response: AxiosResponse | undefined = await this.get(`/user-data/${userID}`);
+            // const response: AxiosResponse | undefined = await this.get(`/user-data/1231323213`);
 
             if(response?.data){
                 return response.data;
             }
             else{
-                throw new Error('Cannot Get /user-data');
+                throw new Error('Cannot Get User Data');
             }
         } catch (error) {
-            console.log(error)
-            throw error;  
+            console.log(error);
+
+            const err = error as AxiosError;
+
+            if(err.status === 404){
+                throw new Error('Error. Cannot get user data')
+            }
+            
+            throw new Error('Something went wrong. Please contact admin');     
         }
     };
 
     async getForecastData(city: string, days: number){
         try {
-            const response = this.get(`/weather/forecast?city=${city}&days=${days}`);
-            return response;
+            const response: AxiosResponse | undefined = await this.get(`/weather/forecast?city=${city}&days=${days}`);
+            // const response: AxiosResponse | undefined = await this.get(`/weather/forecast`);
+            if(response?.data){
+                return response;
+            }
+            else{
+                throw new Error('Cannot Get Forecast Data');
+            }
         } catch (error) {
             console.log(error);
-            throw error;
+            const err = error as AxiosError;
+
+            if(err.status === 400){
+                throw new Error('Something went wrong. Cannot get forecast data')
+            };
+
+            throw new Error('Cannot get Forecast Data. Please contact admin');
         }
     }
 };
