@@ -45,13 +45,13 @@ export default function Home() {
       </div>
      <div className="space-y-12">
       <div>
-          <p className='text-3xl font-bold mb-4'>Current</p>
+          <p className='text-2xl lg:text-3xl font-bold mb-4'>Current</p>
           <div className="">
             <WeatherCard selectedCity={selectedCity} favCityList={userData?.favourite_cities || []}/>
           </div>
         </div>
         <div>
-          <p className='text-3xl font-bold mb-4'>Forecast</p>
+          <p className='text-2xl lg:text-3xl font-bold mb-4'>Forecast</p>
           <Forecast selected_city={selectedCity}/>
         </div>
      </div>
