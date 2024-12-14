@@ -77,7 +77,7 @@ export class UserDataService {
         data: {favourite_cities: userData.favourite_cities}
       });
 
-      return {message: 'Success Update User Favourite City'}
+      return updateUserDataDto.value === true ? {message: 'Success Update User Favourite City', value: 'add'} : {message: 'Success Remove User Favourite City', value: 'remove'}
 
     } catch (error) {
       if(error.status === 404){

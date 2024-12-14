@@ -9,21 +9,22 @@ import { UserData } from "@/types/UserData";
 import ApiProvider from "@/libs/ApiProvider";
 import Forecast from "./components/Forecast";
 import toast from "react-hot-toast";
+
 export default function Home() {
   const [selectedCity, setSelectedCity] = useState(CityList[0]);
-
+  const [userCookie, setUserCookie] = useState<null | UserData>(null);
   const [userData, setUserData] = useState<null | UserData>(null);
 
   useEffect(() => {
-    const userData = getUserData();
-    setUserData(userData)
+    const userCookie = getUserData();
+    setUserCookie(userCookie);
   }, [])
 
   useEffect(() => {
     const fetchUserData = async () => {
-        if(userData){
+        if(userCookie){
          try {
-            const data = await ApiProvider.getUserData(userData.id);
+            const data = await ApiProvider.getUserData(userCookie.id);
             setUserData(data);
          } catch (error) {
             const err = error as Error;
@@ -32,8 +33,7 @@ export default function Home() {
         }
     };
     fetchUserData();
-    
-  }, [userData])
+  }, [userCookie]);
 
   const changeCity = (city: string) => {
     setSelectedCity(city);

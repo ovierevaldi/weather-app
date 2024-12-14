@@ -5,7 +5,7 @@ import WindSpeedData, { WindSpeedUnit } from "@/configs/WindSpeedData"
 import ApiProvider from "@/libs/ApiProvider"
 import { WeatherDataProps } from "@/types/WeatherData"
 import Image from "next/image"
-import { useEffect,useState } from "react"
+import { useEffect, useState } from "react"
 import WindSpeed from "./WindSpeed"
 import Loading from "./common/Loading"
 import ErrorApi from "./common/ErrorApi"
@@ -24,12 +24,11 @@ const WeatherCard = ({selectedCity, favCityList}: WeatherCardProps) => {
     const [isLoadApi, setIsLoadApi] = useState(false);
     const [isErrorApi, setIsErrorApi] = useState(false);
     const [refetchApi, setRefetchApi] = useState(0);
-    
     const [selectedDegree] = 
     useState<TemperatureUnit>(Degree.celcius);
     const [selectedWindSpeed] = 
     useState<WindSpeedUnit>(WindSpeedData.kph);
-    const [postFavourite, setPostFavourite] = useState(false);
+    const [postFavourite, setPostFavourite] = useState<{isPost: boolean; value: boolean}>({isPost: false, value: false});
 
 
     const retryFetchApi = () => {
@@ -65,11 +64,11 @@ const WeatherCard = ({selectedCity, favCityList}: WeatherCardProps) => {
     }, [refetchApi, selectedCity]);
 
     useEffect(() => {
-        const setFavourite = async (state: boolean) => {
-            if(state === true){
+        const setFavourite = async (state: {isPost: boolean; value: boolean}) => {
+            if (state.isPost) {
                 const data: PostFavouriteCity = {
                     city: selectedCity,
-                    value: state
+                    value: state.value
                 };
                 
                 const userData = getUserData() as UserCookie;
@@ -89,24 +88,30 @@ const WeatherCard = ({selectedCity, favCityList}: WeatherCardProps) => {
                         }
                     }
                 }
-
+    
                 // Update User Favourite
                 else{
                     try {
-                        await ApiProvider.updateFavouriteCity({id: userData.id, data: {...data}});
-                        toast.success("New Favourite City Added")
+                        console.log(state);
+                        const response = await ApiProvider.updateFavouriteCity({id: userData.id, data: {...data}});
+                        console.log(response)
+                        if(response.value === 'add')
+                            toast.success(response.value);
+                        else{
+                            toast.error(response.value)
+                        }
                     } catch (error) {
                         const err = error as Error;
                         toast.error(err.message)
                     }
                 };
-
-                setPostFavourite(false);
+                setPostFavourite({isPost: false, value: state.value});
             }
         };
 
-        setFavourite(postFavourite)
-    }, [postFavourite, selectedCity])
+        setFavourite(postFavourite);
+
+    }, [postFavourite])
 
     return (
         <div className="">
@@ -153,7 +158,7 @@ const WeatherCard = ({selectedCity, favCityList}: WeatherCardProps) => {
                     </div>
 
                     <div className="absolute top-0 right-0 -translate-y-2 -translate-x-2">
-                            <FavCityBtn isFav={isFavCity()} onFavClicked={(state) => setPostFavourite(state)} />
+                            <FavCityBtn isFav={isFavCity()} onFavClicked={(state) => setPostFavourite({isPost: true, value: state})} />
                         </div>
                 
                 </div>
