@@ -7,8 +7,10 @@ const getUserData = () => {
 
     if(userData){
         const decryptedVal = EncryptProvider().decrypt(userData);
-        if(decryptedVal)
+        if(decryptedVal){
             return JSON.parse(decryptedVal)
+        }
+
         else{
             return {error: "Cannot Decrypt Cookie"}
         }
