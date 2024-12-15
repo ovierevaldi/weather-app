@@ -1,81 +1,13 @@
-# Turborepo starter
+HOW TO INSTALL:
 
-This is an official starter Turborepo.
-
-## Using this example
-
-Run the following command:
-
-```sh
-npx create-turbo@latest
-```
-
-## What's inside?
-
-This Turborepo includes the following packages/apps:
-
-### Apps and Packages
-
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm build
-```
-
-### Develop
-
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm dev
-```
-
-### Remote Caching
-
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-npx turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+1. Clone the repo
+2. Hit npm install in the clone directory (warn big file: around 800mb)
+3. Go to ( https://drive.google.com/drive/folders/1o9IHyBytaonPPA3YlYsFy8-WZJUrfZGB?usp=sharing ) and download .env for both frontend and backend. (open each folder named exactly frontend and backend);
+4. for env backend, paste it on the folder Apps > backend. Don'f forget to rename the extention (occurs in windows) it in case it's just env instead of .env
+5. Please change the .env for backend on DEFAULT_ADMIN_ID and DEFAULT_ADMIN_PASS to your own PostgreSQL admin account;
+6. Run command: npx prisma migrate dev --name init on the directory: apps > backend.
+7. for env frontend, paste it on the folder Apps > frontend. Don'f forget to rename the extention (occurs in windows) it in case it's just env instead of .env
+8. go back to project folder root directory and hit command: npx turbo dev
+9. If you prefer to use global turbo cli, you can install it by hitting command: npm install turbo --global. And then just type turbo dev in your cmd
+10. Open backend in port 3000: http://localhost:3000/
+11. Open frontend in port 4500: http://localhost:4500/
