@@ -11,3 +11,17 @@ HOW TO INSTALL:
 9. If you prefer to use global turbo cli, you can install it by hitting command: npm install turbo --global. And then just type turbo dev in your cmd
 10. Open backend in port 3000: http://localhost:3000/
 11. Open frontend in port 4500: http://localhost:4500/
+
+
+Made with 💖 with these stacks:
+- Javascript & Typescript
+- NestJS
+- NextJS / ReactjS
+- Prisma
+- Postgresql
+- turbo monorepo
+
+
+Created Dec 2024
+Author: bravee_98
+Contact: revaldiovie3@gmail.com | https://github.com/ovierevaldi
