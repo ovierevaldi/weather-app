@@ -61,7 +61,7 @@ export default function Home() {
           </div>
         </div>
         <div>
-          <p className='text-2xl lg:text-3xl font-bold mb-4'>Forecast</p>
+          <p className='text-2xl lg:text-3xl font-bold mb-4'>Forecast <span className="text-xl font-normal">{`(Next 3 Days)`}</span> </p>
           <Forecast selected_city={selectedCity}/>
         </div>
      </div>

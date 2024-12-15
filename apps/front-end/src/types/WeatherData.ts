@@ -79,7 +79,6 @@ export type ForecastWeatherProp = {
     current: WeatherProp;
     forecast: Forecast;
     location: LocationProp;
-    
 };
 
 type Forecast = {

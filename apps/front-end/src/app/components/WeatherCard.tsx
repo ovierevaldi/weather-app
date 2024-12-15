@@ -13,6 +13,7 @@ import FavCityBtn from "./FavCityBtn"
 import { PostFavouriteCity, UserCookie} from "@/types/UserData"
 import toast from "react-hot-toast"
 import { getUserData, setUserData } from "@/libs/CookieProvider"
+import DateFormat from "@/libs/DateFormat"
 
 type WeatherCardProps = {
     selectedCity: string;
@@ -135,7 +136,11 @@ const WeatherCard = ({selectedCity, favCityList, currentLocation, cityDetectedOn
     return (
         <div>
             {
-                weatherData && !isLoadApi && !isErrorApi && <p className="text-center text-3xl font-bold mb-4">{weatherData.location.name}</p>}
+                weatherData && !isLoadApi && !isErrorApi && 
+                <div>
+                    <p className="text-center text-3xl font-bold mb-4">{weatherData.location.name}</p>
+                </div>
+            }    
             {
                 isLoadApi && <Loading /> 
             }
@@ -147,6 +152,9 @@ const WeatherCard = ({selectedCity, favCityList, currentLocation, cityDetectedOn
                 weatherData && !isLoadApi && !isErrorApi &&
 
                 <div className="border rounded-lg px-8 py-6 relative space-y-4 max-w-md mx-auto">
+                    {
+                       <p className='text-center text-xl font-bold'> {DateFormat().getDayName(weatherData.location.localtime)}, <span>{weatherData.location.localtime.split(' ')[1]}</span></p>
+                    }
                     <div className="flex items-center justify-center">
                         <Image 
                             src={ApiProvider.getCurrentWeatherIcon(weatherData.current.condition.icon)} 
