@@ -3,7 +3,7 @@
 import Degree, { TemperatureUnit } from "@/configs/Degree"
 import WindSpeedData, { WindSpeedUnit } from "@/configs/WindSpeedData"
 import ApiProvider from "@/libs/ApiProvider"
-import { WeatherDataProps } from "@/types/WeatherData"
+import { GeoLocation, WeatherDataProps } from "@/types/WeatherData"
 import Image from "next/image"
 import { useEffect, useState } from "react"
 import WindSpeed from "./WindSpeed"
@@ -13,13 +13,16 @@ import FavCityBtn from "./FavCityBtn"
 import { PostFavouriteCity, UserCookie} from "@/types/UserData"
 import toast from "react-hot-toast"
 import { getUserData, setUserData } from "@/libs/CookieProvider"
+import DateFormat from "@/libs/DateFormat"
 
 type WeatherCardProps = {
     selectedCity: string;
     favCityList: string[];
+    currentLocation: GeoLocation | null;
+    cityDetectedOnGeo: (location: string) => void;
 }
 
-const WeatherCard = ({selectedCity, favCityList}: WeatherCardProps) => {
+const WeatherCard = ({selectedCity, favCityList, currentLocation, cityDetectedOnGeo}: WeatherCardProps) => {
     const [weatherData, setWeatherData] = useState<WeatherDataProps | null>(null);
     const [isLoadApi, setIsLoadApi] = useState(false);
     const [isErrorApi, setIsErrorApi] = useState(false);
@@ -29,7 +32,8 @@ const WeatherCard = ({selectedCity, favCityList}: WeatherCardProps) => {
     const [selectedWindSpeed] = 
     useState<WindSpeedUnit>(WindSpeedData.kph);
     const [postFavourite, setPostFavourite] = useState<{isPost: boolean; value: boolean}>({isPost: false, value: false});
-
+    const [prevLocation, setPrevLocation] = useState(currentLocation);
+    const [prevSelectedCity, setPrevSelectedCity] = useState('');
 
     const retryFetchApi = () => {
         return setRefetchApi(refetchApi + 1);
@@ -47,8 +51,15 @@ const WeatherCard = ({selectedCity, favCityList}: WeatherCardProps) => {
         const getWeather = async () => {
           try {
             setIsLoadApi(true);
-    
-            setWeatherData(await ApiProvider.getCurrentWeather(selectedCity) as WeatherDataProps);
+            
+            if(prevLocation !== currentLocation && currentLocation != null){
+                setWeatherData(await ApiProvider.getCurrentWeather(currentLocation) as WeatherDataProps);
+                setPrevLocation(currentLocation);
+            }
+            else if(prevSelectedCity !== selectedCity){
+                setWeatherData(await ApiProvider.getCurrentWeather(selectedCity) as WeatherDataProps);
+                setPrevSelectedCity(selectedCity);
+            };
 
             setIsErrorApi(false);
     
@@ -61,7 +72,7 @@ const WeatherCard = ({selectedCity, favCityList}: WeatherCardProps) => {
         };
         getWeather();
 
-    }, [refetchApi, selectedCity]);
+    }, [refetchApi, selectedCity, currentLocation]);
 
     useEffect(() => {
         const setFavourite = async (state: {isPost: boolean; value: boolean}) => {
@@ -111,10 +122,25 @@ const WeatherCard = ({selectedCity, favCityList}: WeatherCardProps) => {
 
         setFavourite(postFavourite);
 
-    }, [postFavourite])
+    }, [postFavourite]);
+
+    useEffect(() => {
+        const setLocationOnGeo = () => {
+            if(weatherData?.location.name)
+                cityDetectedOnGeo(weatherData?.location.name)
+        };
+        setLocationOnGeo();
+    }, [currentLocation])
+
 
     return (
-        <div className="">
+        <div>
+            {
+                weatherData && !isLoadApi && !isErrorApi && 
+                <div>
+                    <p className="text-center text-3xl font-bold mb-4">{weatherData.location.name}</p>
+                </div>
+            }    
             {
                 isLoadApi && <Loading /> 
             }
@@ -126,6 +152,9 @@ const WeatherCard = ({selectedCity, favCityList}: WeatherCardProps) => {
                 weatherData && !isLoadApi && !isErrorApi &&
 
                 <div className="border rounded-lg px-8 py-6 relative space-y-4 max-w-md mx-auto">
+                    {
+                       <p className='text-center text-xl font-bold'> {DateFormat().getDayName(weatherData.location.localtime)}, <span>{weatherData.location.localtime.split(' ')[1]}</span></p>
+                    }
                     <div className="flex items-center justify-center">
                         <Image 
                             src={ApiProvider.getCurrentWeatherIcon(weatherData.current.condition.icon)} 

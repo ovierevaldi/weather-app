@@ -79,7 +79,6 @@ export type ForecastWeatherProp = {
     current: WeatherProp;
     forecast: Forecast;
     location: LocationProp;
-    
 };
 
 type Forecast = {
@@ -110,4 +109,9 @@ type AstronomyProp = {
     is_moon_up: number;
     is_sun_up: number;
 };
+
+export type GeoLocation = {
+    latitude: number;
+    longitude: number;
+}
 

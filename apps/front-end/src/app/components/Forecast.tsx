@@ -7,6 +7,7 @@ import WindSpeed from './WindSpeed';
 import WindSpeedData, { WindSpeedUnit } from '@/configs/WindSpeedData';
 import Loading from './common/Loading';
 import toast from 'react-hot-toast';
+import DateFormat from '@/libs/DateFormat';
 
 type ForecastProp = {
     selected_city: string;
@@ -47,7 +48,7 @@ const Forecast = ({selected_city, day_amount = 4} : ForecastProp) => {
                         if(index != 0){
                             return(
                             <div key={index} className='border px-8 py-6 rounded-lg w-full space-y-2 max-w-xl mx-auto'>
-                                <p className='text-center text-xl font-bold'>{f_data.date}</p>
+                                <p className='text-center text-xl font-bold'>{DateFormat().getDayName(f_data.date)}</p>
                                 <div className='flex items-center justify-center'>
                                     <Image 
                                         src={ApiProvider.getCurrentWeatherIcon(f_data.day.condition.icon)} 
