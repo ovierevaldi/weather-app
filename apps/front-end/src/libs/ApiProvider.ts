@@ -42,9 +42,19 @@ class ApiProviderClass {
         return this.apiClient?.patch<T>(this.base_url + url, data)
     }
 
-    async getCurrentWeather(city: string){
+    async getCurrentWeather(q: string | object){
         try {
-            const response = await this.get(`/weather?city=${city}`);
+            let data = '';
+
+            if(typeof q === 'string'){
+                data = q
+            }
+
+            if(typeof q === 'object' && 'latitude' in q && 'longitude' in q){
+                data = `${q.latitude}, ${q.longitude}`;
+            };
+
+            const response = await this.get(`/weather?q=${data}`);
             
             if(response?.data){
                 return response.data;

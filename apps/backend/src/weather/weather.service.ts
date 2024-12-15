@@ -10,9 +10,9 @@ export class WeatherService {
   constructor(private readonly configService: ConfigService, private loggerService: DatabaseLogger)
   {}
 
-  async findAll(city: string) {
+  async findAll(q: string) {
+    const url = `https://api.weatherapi.com/v1/current.json?key=${this.configService.get<string>('WEATHER_API_KEY')}&q=${q}`;
 
-    const url = `https://api.weatherapi.com/v1/current.json?key=${this.configService.get<string>('WEATHER_API_KEY')}&q=${city}`;
     try {
       const response = await axios.get(url);
       return response.data;

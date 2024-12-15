@@ -6,8 +6,8 @@ export class WeatherController {
   constructor(private readonly weatherService: WeatherService) {}
 
   @Get()
-  findAll(@Query('city') city: string) {
-    return this.weatherService.findAll(city);
+  findAll(@Query('q') q: string) {
+    return this.weatherService.findAll(q);
   }
 
   @Get('/forecast')

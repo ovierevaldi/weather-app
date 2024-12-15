@@ -111,3 +111,8 @@ type AstronomyProp = {
     is_sun_up: number;
 };
 
+export type GeoLocation = {
+    latitude: number;
+    longitude: number;
+}
+
