@@ -72,7 +72,7 @@ const WeatherCard = ({selectedCity, favCityList, currentLocation, cityDetectedOn
         };
         getWeather();
 
-    }, [refetchApi, selectedCity, currentLocation]);
+    }, [refetchApi, selectedCity, currentLocation, prevLocation, prevSelectedCity]);
 
     useEffect(() => {
         const setFavourite = async (state: {isPost: boolean; value: boolean}) => {

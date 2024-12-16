@@ -2,7 +2,6 @@ import { NavHeaderProp } from '@/types/UI-Types';
 import Link from 'next/link'
 import { FaStar } from "react-icons/fa";
 import { IoMdHome } from "react-icons/io";
-import UserProfileBtn from './UserProfileBtn';
 
 const Header = () => {
   

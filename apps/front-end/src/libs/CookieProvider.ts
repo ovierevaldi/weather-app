@@ -1,7 +1,6 @@
 import Cookies from "js-cookie";
 import { UserCookie } from "@/types/UserData";
 import EncryptProvider from "./Encryption";
-import toast from "react-hot-toast";
 
 const getUserData = () => {
     const userData =  Cookies.get('user_id');

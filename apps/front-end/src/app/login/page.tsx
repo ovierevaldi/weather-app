@@ -90,8 +90,8 @@
 //     </div>
 //   )
 // }
-const page = () => {
+const LoginPage = () => {
     return('Under construction');
 }
 
-export default page
+export default LoginPage

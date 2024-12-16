@@ -5,12 +5,12 @@ import React, { useState } from 'react'
 import DefaultButton from '../components/common/DefaultButton'
 import DefaultInput from '../components/common/DefaultInput'
 import FormValidation from '@/libs/FormValidation'
-import { RegisUserErrorApiProp, RegisUserErrorProp, RegisUserProp } from '@/types/UserData';
+import { RegisUserErrorApiProp, RegisUserProp } from '@/types/UserData';
 import ApiProvider from '@/libs/ApiProvider'
 import toast from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
 
-const page = () => {
+const RegisterPage = () => {
     const [errorForm, setErrorForm] = useState({username: '', password: ''});
     const [isSubmittingForm, setIsSubmittingForm] = useState(false);
     const router = useRouter();
@@ -87,4 +87,4 @@ const page = () => {
   )
 }
 
-export default page
+export default RegisterPage
