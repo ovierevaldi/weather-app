@@ -2,6 +2,8 @@ import CityList from '@/configs/CityList'
 import React from 'react'
 import DetectLocationBtn from './common/DetectLocationBtn';
 import { GeoLocation } from '@/types/WeatherData';
+import SearchInput from './common/SearchInput';
+import toast from 'react-hot-toast';
 
 type SelectCityProp = {
     value: string;
@@ -18,10 +20,14 @@ const SelectCity = ({value, onCityChanged, onLocationChanged, cityGeoLocation} :
 
     const changeLocation = (location: GeoLocation) => {
         onLocationChanged(location);
+    };
+
+    const onCityPicked = (city: string) => {
+        onCityChanged(city)
     }
 
     return (
-        <div className='flex justify-between'>
+        <div className='flex justify-between items-center'>
             <div className="flex items-center gap-x-4">
                 <p className='font-bold text-lg lg:text-3xl'>Select Region:</p>
                 <select
@@ -38,6 +44,7 @@ const SelectCity = ({value, onCityChanged, onLocationChanged, cityGeoLocation} :
                     }
                 </select>
             </div>
+            <SearchInput onCityPicked={onCityPicked}/>
             <DetectLocationBtn location={cityGeoLocation} onLocationChanged={changeLocation}/>
 
         </div>

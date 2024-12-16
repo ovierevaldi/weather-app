@@ -1,10 +1,11 @@
 [
-    "Jakarta",
-    "New York",
-    "London",
-    "Paris",
-    "Tokyo",
-    "Sydney",
-    "Los Angeles",
-    "Berlin"
+    { "objectID": 1, "name": "Jakarta" },
+    { "objectID": 2, "name": "New York" },
+    { "objectID": 3, "name": "London" },
+    { "objectID": 4, "name": "Paris" },
+    { "objectID": 5, "name": "Tokyo" },
+    { "objectID": 6, "name": "Sydney" },
+    { "objectID": 7, "name": "Los Angeles" },
+    { "objectID": 8, "name": "Berlin" }
 ]
+  
