@@ -3,7 +3,6 @@ import React from 'react'
 import DetectLocationBtn from './common/DetectLocationBtn';
 import { GeoLocation } from '@/types/WeatherData';
 import SearchInput from './common/SearchInput';
-import toast from 'react-hot-toast';
 
 type SelectCityProp = {
     value: string;

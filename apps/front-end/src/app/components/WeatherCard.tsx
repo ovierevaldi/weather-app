@@ -122,7 +122,7 @@ const WeatherCard = ({selectedCity, favCityList, currentLocation, cityDetectedOn
 
         setFavourite(postFavourite);
 
-    }, [postFavourite]);
+    }, [postFavourite, selectedCity]);
 
     useEffect(() => {
         const setLocationOnGeo = () => {
@@ -130,7 +130,7 @@ const WeatherCard = ({selectedCity, favCityList, currentLocation, cityDetectedOn
                 cityDetectedOnGeo(weatherData?.location.name)
         };
         setLocationOnGeo();
-    }, [currentLocation])
+    }, [currentLocation, cityDetectedOnGeo, weatherData?.location.name])
 
 
     return (

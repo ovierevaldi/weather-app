@@ -31,6 +31,8 @@ const SearchInput = ({onCityPicked} : SearchInputProp) => {
 
     const onSearchQuery = (q: string) => {
         setSearchQuery(q);
+        if(!q)
+            clearQuery();
     };
 
     const clearQuery = () => {
@@ -39,13 +41,13 @@ const SearchInput = ({onCityPicked} : SearchInputProp) => {
     }
 
     return (
-    <div className='flex-grow max-w-xs relative space-y-2'>
+    <div 
+        className='flex-grow max-w-xs lg:max-w-lg lg:text-xl relative space-y-2'>
         <input
             value={searchQuery}
             className='p-2 rounded text-white bg-[#282828] border w-full'
             onChange={(e) => onSearchQuery(e.target.value)}
-            type='text' placeholder='Search City'
-            onBlur={() => clearQuery()}/>
+            type='text' placeholder='Search City'/>
         {
             listResult.length > 0 &&  
             <div className='absolute p-2 bg-gray-200 text-black w-full space-y-4 rounded max-h-[220px] overflow-auto'>
