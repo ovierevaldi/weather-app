@@ -5,21 +5,21 @@ import React, { useRef, useState } from 'react'
 import DefaultButton from '../components/common/DefaultButton'
 import DefaultInput from '../components/common/DefaultInput'
 import FormValidation from '@/libs/FormValidation'
-import { RegisUserErrorProp, RegisUserProp } from '@/types/UserData';
+import { RegisUserErrorApiProp, RegisUserErrorProp, RegisUserProp } from '@/types/UserData';
+import ApiProvider from '@/libs/ApiProvider'
+import toast from 'react-hot-toast'
 
 const page = () => {
     const formRef = useRef(null);
     const [errorForm, setErrorForm] = useState({username: '', password: ''});
+    const [isSubmittingForm, setIsSubmittingForm] = useState(false);
 
-    const submitForm: React.FormEventHandler = (e) => {
+    const submitForm: React.FormEventHandler = async (e) => {
         e.preventDefault();
         const userData = new FormData(e.target as HTMLFormElement);
         const formValues = Object.fromEntries(userData.entries()) as RegisUserProp ;
         
         const validationResult = FormValidation().registerValidation(formValues);
-
-        const pass = userData.get('password') as string;
-        const retypePass = userData.get('retype-password') as string;
         
         if(!validationResult.isSuccess && validationResult.errors){
             setErrorForm({
@@ -29,8 +29,27 @@ const page = () => {
         }
         else{
             setErrorForm({password: '', username: ''});
+            const result = await postUserData(validationResult.data as RegisUserProp);
+            if(result){
+                console.log('can redirect')
+            }
         }
     };
+
+    const postUserData = async (userData: RegisUserProp) => {
+        try {
+            setIsSubmittingForm(true);
+            await ApiProvider.registerUser(userData);
+            toast.success('Success Create user');
+            return true
+        } catch (error) {
+            const err = error as RegisUserErrorApiProp
+            toast.error(err.message);
+            return false
+        } finally{
+            setIsSubmittingForm(false);
+        }
+    }
 
   return (
     <div className='max-w-xl mx-auto space-y-8 border p-4 rounded'>
@@ -55,7 +74,9 @@ const page = () => {
                 }
             </div>
 
-            <DefaultButton type='submit'>
+            <DefaultButton 
+                type='submit'
+                isDisabled={isSubmittingForm}>
                 Register
             </DefaultButton>
 

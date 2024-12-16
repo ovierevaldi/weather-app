@@ -26,4 +26,8 @@ export type RegisUserProp = {
 export type RegisUserErrorProp = {
     username: string[],
     password: string[]
+};
+
+export type RegisUserErrorApiProp = {
+    message: string[];
 }

@@ -1,4 +1,4 @@
-import { PatchFavouriteCity, PostFavouriteCity} from "@/types/UserData";
+import { PatchFavouriteCity, PostFavouriteCity, RegisUserErrorApiProp} from "@/types/UserData";
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from "axios";
 
 class ApiProviderClass {
@@ -168,6 +168,27 @@ class ApiProviderClass {
             };
 
             throw new Error('Cannot get Forecast Data. Please contact admin');
+        }
+    }
+
+    async registerUser(data: {username: string, password: string}){
+        try {
+            const response: AxiosResponse | undefined = await this.apiClient?.post('/auth', data);
+
+            if(response?.data){
+                return {message: 'success create user'}
+            }
+            else{
+                throw new Error('Something went wrong. Cannot Create User') 
+            }
+        } catch (error) {
+            const err = error as AxiosError;
+            const errData = err.response?.data as RegisUserErrorApiProp
+            
+            if(err.status === 400){
+                throw new Error(errData.message[0])
+            }
+            throw new Error('Something went wrong. Cannot Create User')
         }
     }
 };
