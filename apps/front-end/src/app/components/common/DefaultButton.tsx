@@ -3,10 +3,10 @@ import React from 'react'
 type DefaultButtonProp = {
     children: React.ReactNode;
     type: "submit" | "reset" | "button" | undefined
-    isDisabled: boolean
+    isDisabled?: boolean
 }
 
-const DefaultButton = ({children, type, isDisabled}: DefaultButtonProp) => {
+const DefaultButton = ({children, type, isDisabled = false}: DefaultButtonProp) => {
   return (
     <button 
         className='p-2 bg-white text-black rounded-lg hover:bg-gray-200 disabled:bg-gray-200'

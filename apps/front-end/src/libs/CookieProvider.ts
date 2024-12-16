@@ -1,10 +1,10 @@
 import Cookies from "js-cookie";
 import { UserCookie } from "@/types/UserData";
 import EncryptProvider from "./Encryption";
+import toast from "react-hot-toast";
 
 const getUserData = () => {
     const userData =  Cookies.get('user_id');
-
     if(userData){
         const decryptedVal = EncryptProvider().decrypt(userData);
         if(decryptedVal){
@@ -19,6 +19,7 @@ const getUserData = () => {
 };
 
 const setUserData = (userData: UserCookie) => {
+    console.log(userData)
     // Cookie Expired in 7 days
     const encryptedVal = EncryptProvider().encrypt(JSON.stringify(userData));
     if(encryptedVal)
@@ -26,6 +27,10 @@ const setUserData = (userData: UserCookie) => {
     else{
         return {error: "Cannot Encrypt Cookie"}
     }
+};
+
+const deleteUserData = () => {
+    Cookies.remove('user_id');
 }
 
-export { getUserData, setUserData }
+export { getUserData, setUserData, deleteUserData }

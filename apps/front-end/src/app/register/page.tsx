@@ -1,18 +1,19 @@
 'use client'
 
 import Link from 'next/link'
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import DefaultButton from '../components/common/DefaultButton'
 import DefaultInput from '../components/common/DefaultInput'
 import FormValidation from '@/libs/FormValidation'
 import { RegisUserErrorApiProp, RegisUserErrorProp, RegisUserProp } from '@/types/UserData';
 import ApiProvider from '@/libs/ApiProvider'
 import toast from 'react-hot-toast'
+import { useRouter } from 'next/navigation'
 
 const page = () => {
-    const formRef = useRef(null);
     const [errorForm, setErrorForm] = useState({username: '', password: ''});
     const [isSubmittingForm, setIsSubmittingForm] = useState(false);
+    const router = useRouter();
 
     const submitForm: React.FormEventHandler = async (e) => {
         e.preventDefault();
@@ -31,7 +32,7 @@ const page = () => {
             setErrorForm({password: '', username: ''});
             const result = await postUserData(validationResult.data as RegisUserProp);
             if(result){
-                console.log('can redirect')
+                router.push('/login')
             }
         }
     };
@@ -54,7 +55,7 @@ const page = () => {
   return (
     <div className='max-w-xl mx-auto space-y-8 border p-4 rounded'>
         <p className='text-center text-3xl font-semibold'>Create Account</p>
-        <form ref={formRef} onSubmit={submitForm} 
+        <form onSubmit={submitForm} 
             className='flex flex-col gap-y-8'>
             <div className='flex flex-col gap-y-2'>
                 <label htmlFor='username' className='font-semibold'>Username</label>

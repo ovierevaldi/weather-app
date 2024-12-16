@@ -16,6 +16,7 @@ export type PatchFavouriteCity = {
 
 export type UserCookie = {
     id: string
+    username?: string
 };
 
 export type RegisUserProp = {

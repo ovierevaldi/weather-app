@@ -190,6 +190,31 @@ class ApiProviderClass {
             }
             throw new Error('Something went wrong. Cannot Create User')
         }
+    };
+
+    async loginUser(data: {username: string, password: string}){
+        try {
+            const response: AxiosResponse | undefined = await this.apiClient?.post('/auth/login', data);
+
+            if(response?.data){
+                return {message: 'success create user', data: response.data}
+            }
+            else{
+                throw new Error('Something went wrong. Cannot Login') 
+            }
+        } catch (error) {
+            const err = error as AxiosError;
+            const errData = err.response?.data as RegisUserErrorApiProp
+            
+            if(err.status === 401){
+                throw new Error(errData.message[0])
+            }
+
+            if(err.status === 404){
+                throw new Error(errData.message[0])
+            }
+            throw new Error('Something went wrong. Cannot login')
+        }
     }
 };
 
