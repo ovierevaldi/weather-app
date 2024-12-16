@@ -16,4 +16,14 @@ export type PatchFavouriteCity = {
 
 export type UserCookie = {
     id: string
+};
+
+export type RegisUserProp = {
+    username: string,
+    password: string
+}
+
+export type RegisUserErrorProp = {
+    username: string[],
+    password: string[]
 }
